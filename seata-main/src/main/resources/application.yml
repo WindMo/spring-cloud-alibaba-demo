@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    username: root
+    password: root123456
+    url: "jdbc:mysql:192.168.100.100:3306/seata_test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+seata:
+  client:

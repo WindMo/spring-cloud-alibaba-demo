@@ -1,0 +1,29 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8010
+# 应用名称
+spring:
+  application:
+    name: provider-nacos
+  cloud:
+    nacos:
+      discovery:
+        # Nacos认证信息
+        username: nacos
+        password: nacos
+        # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+        server-addr: 192.168.100.100:18848
+        # 注册到 nacos 的指定 namespace，默认为 public
+        namespace: public
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml # 配置文件格式，必须是yaml而不是yml
+        prefix: ${spring.application.name} # 默认配置如此
+#        namespace: public # 命名空间 默认是public， 但是指定了 public 命名空间就有问题，控制台一直刷更新配置的日志
+        group: DEFAULT_GROUP # 分组
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 对外允许访问的路径权限，此处为 * 全部

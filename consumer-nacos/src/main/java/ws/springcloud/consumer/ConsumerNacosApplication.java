@@ -1,0 +1,15 @@
+package ws.springcloud.consumer;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@EnableFeignClients
+@SpringBootApplication
+public class ConsumerNacosApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerNacosApplication.class, args);
+    }
+
+}

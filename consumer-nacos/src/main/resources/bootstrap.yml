@@ -1,0 +1,65 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8020
+# Nacos Spring Cloud 中，dataId 的完整格式：
+# 应用名称 ${prefix}-${spring.profiles.active}.${file-extension}；
+# 默认 ${prefix} = ${spring.application.name}
+# 可配置 ${spring.cloud.nacos.config.prefix} 修改 ${prefix} 的值
+spring:
+  application:
+    name: consumer-nacos
+  cloud:
+    nacos:
+      discovery:
+        # Nacos认证信息
+        username: nacos
+        password: nacos
+        # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+        server-addr: 192.168.100.100:18848
+        # 注册到 nacos 的指定 namespace，默认为 public
+        namespace: public
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml # 配置文件格式，必须是yaml而不是yml
+        prefix: ${spring.application.name} # 默认配置如此
+#        namespace: public # 命名空间# 命名空间 默认是public， 但是指定了 public 命名空间就有问题，控制台一直刷更新配置的日志
+        group: DEFAULT_GROUP # 分组
+    sentinel:
+      log:
+        dir: D:\program\JAVA\项目\spring-cloud-alibaba-demo\consumer-nacos\target\csp\logs
+      transport:
+        dashboard: 192.168.100.100:18858 # Sentinel-dashboard（Sentinel服务端） 地址
+        port: 8719 # 以该端口作为sentinel客户端连接到 Sentinel服务端，如该端口被占用则一直+1寻找下一个未被的端口
+      datasource: # sentinel连接到nacos，使用nacos配置中心的功能作为sentinel的配置持久化，从nacos获取sentinel的配置，在sentinel-dashboard的配置则不会持久化到nacos
+        myds:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            dataId: ${spring.application.name}-sentinel
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+#  [
+#    {
+#      "resource": "/flow/testA",
+#      "limitApp": "default",
+#      "grade": 1,
+#      "count" : 2,
+#      "strategy": 0,
+#      "controlBehavior": 0,
+#      "clusterMode": false
+#    }
+#  ]
+#  // resource:资源名称;
+#  // limitApp:来源应用;
+#  // grade:阈值类型，0表示线程数，1表示QPS;
+#  // count:单机阈值;
+#  // strategy:流控模式，0表示直接，1表示关联，2表示链路;
+#  // controlBehavior:流控效果，0表示快速失败，1表示Warm Up，2表示排队等待;
+#  // clusterMode:是否集群
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 监控点对外允许访问的路径权限，此处为 * 全部
